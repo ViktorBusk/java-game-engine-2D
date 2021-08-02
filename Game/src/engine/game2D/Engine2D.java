@@ -7,9 +7,9 @@ import java.util.HashMap;
 public abstract class Engine2D {
     private Thread gameLoop;
     private boolean isRunning;
-    private HashMap<String, Scene> scenes;
+    private final HashMap<String, Scene> scenes;
     private Scene currentScene;
-    private JFrame frame;
+    private final JFrame frame;
 
     public Engine2D() {
         this.scenes = new HashMap<>();
@@ -71,7 +71,7 @@ public abstract class Engine2D {
 
             // we will need the last update time.
             long lastUpdateTime = System.nanoTime();
-            // store the time we started this will be used for updating map and charcter animations
+            // store the time we started this will be used for updating map and character animations
             long currTime = System.currentTimeMillis();
             // alert if no current scene is set
             boolean alertNoCurrentScene = true;
@@ -97,7 +97,7 @@ public abstract class Engine2D {
                     updateCount++;
                 }
 
-                // if for some reason an update takes forever, we don't want to do an insane number of catchups.
+                // if for some reason an update takes forever, we don't want to do an insane number of catchup's.
                 // if you were doing some sort of game that needed to keep EXACT time, you would get rid of this.
                 if (now - lastUpdateTime >= TIME_BETWEEN_UPDATES) {
                     lastUpdateTime = now - TIME_BETWEEN_UPDATES;

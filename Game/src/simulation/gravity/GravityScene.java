@@ -14,7 +14,7 @@ public class GravityScene extends Scene {
     private double G = -0.0001;
     private Player player;
     private float wallStickyFactor = 0.5f;
-    private int startCircleBodyAmount = 50;
+    private final int startCircleBodyAmount = 50;
 
     public GravityScene(Dimension size) {
         super(size);
@@ -25,7 +25,7 @@ public class GravityScene extends Scene {
                                          Math.random() * this.getPreferredSize().height), (int)(Math.random() * 30 + 10), Color.BLACK));
         }
 
-        this.player = new Player(new Vector2D(this.getPreferredSize().width/2, this.getPreferredSize().height/2));
+        this.player = new Player(new Vector2D(this.getPreferredSize().width/2f, this.getPreferredSize().height/2f));
         this.circleBodies.add(this.player);
 
         this.sprites.addAll(this.circleBodies);
