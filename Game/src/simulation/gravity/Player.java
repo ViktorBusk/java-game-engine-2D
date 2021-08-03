@@ -5,7 +5,7 @@ import engine.game2D.Vector2D;
 import java.awt.*;
 
 public class Player extends CircleBody {
-    private float speed = 0.0001f;
+    private final Vector2D speedForce = new Vector2D(10, 10);
     public boolean LEFT, RIGHT, UP, DOWN;
 
     public Player(Vector2D position) {
@@ -14,12 +14,10 @@ public class Player extends CircleBody {
 
     @Override
     public void update(long elapsedTime) {
-
-        if (LEFT) this.acceleration.x -= this.speed * elapsedTime;
-        if (RIGHT) this.acceleration.x += this.speed * elapsedTime;
-        if (UP) this.acceleration.y -= this.speed * elapsedTime;
-        if (DOWN) this.acceleration.y += this.speed * elapsedTime;
-
+        if (LEFT) this.applyForce(this.speedForce.getRotatedTo(Math.PI));
+        if (RIGHT) this.applyForce(this.speedForce.getRotatedTo(0));
+        if (UP) this.applyForce(this.speedForce.getRotatedTo(3*Math.PI/2));
+        if (DOWN) this.applyForce(this.speedForce.getRotatedTo(Math.PI/2));
         super.update(elapsedTime);
     }
 }

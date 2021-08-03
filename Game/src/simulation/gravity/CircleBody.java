@@ -5,6 +5,7 @@ import engine.game2D.Vector2D;
 import java.awt.*;
 
 public class CircleBody extends Sprite {
+    protected double maxSpeed = 1.5;
     protected Vector2D velocity = new Vector2D(0, 0);
     protected Vector2D acceleration = new Vector2D(0, 0);
     private Color color;
@@ -14,10 +15,14 @@ public class CircleBody extends Sprite {
 
     public CircleBody(Vector2D position, int diameter, Color color) {
         super(position, new Vector2D(diameter, diameter));
-        this.diameter = diameter;
         this.color = color;
-        this.radius = diameter/2;
-        this.mass =  (4/3)*Math.PI*Math.pow(radius, 3);
+        this.add(diameter);
+    }
+
+    public void add(double diameter) {
+        this.diameter += diameter;
+        this.radius = this.diameter/2f;
+        this.mass = (4f/3)*Math.PI*Math.pow(radius, 3);
     }
 
     public void applyForce(Vector2D force) {
@@ -39,6 +44,7 @@ public class CircleBody extends Sprite {
     public void update(long elapsedTime) {
         // Update position
         this.velocity.add(this.acceleration.getMultiplied(elapsedTime));
+        this.velocity.clampMagnitude(this.maxSpeed);
         this.position.add(this.velocity.getMultiplied(elapsedTime));
     }
 }

@@ -19,6 +19,7 @@ public class Sprite {
     }
 
     public Vector2D getPosition() { return this.position; }
+    public void setPosition(Vector2D position) { this.position = position; }
 
     public void render(Graphics2D g2d) {
         if (image != null)

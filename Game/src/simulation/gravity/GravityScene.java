@@ -3,34 +3,37 @@ package simulation.gravity;
 import engine.game2D.Scene;
 import engine.game2D.Vector2D;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
+// NOTE: Don't forget to add listeners!
+import java.awt.event.KeyListener;
+//import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class GravityScene extends Scene {
+public class GravityScene extends Scene implements KeyListener {
     private final ArrayList<CircleBody> circleBodies;
-    private double G = -0.0001;
-    private Player player;
-    private float wallStickyFactor = 0.5f;
-    private final int startCircleBodyAmount = 50;
+    private final double G = -0.0001;
+    private final Player player;
+    private final float wallStickyFactor = 0.5f;
 
     public GravityScene(Dimension size) {
         super(size);
         this.circleBodies = new ArrayList<>();
 
-        for (int i = 0; i < this.startCircleBodyAmount; i++) {
+        int startCircleBodyAmount = 100;
+        for (int i = 0; i < startCircleBodyAmount; i++) {
             this.circleBodies.add(new CircleBody(new Vector2D(Math.random() * this.getPreferredSize().width,
-                                         Math.random() * this.getPreferredSize().height), (int)(Math.random() * 30 + 10), Color.BLACK));
+                    Math.random() * this.getPreferredSize().height), (int) (Math.random() * 10 + 10), Color.BLACK));
         }
 
-        this.player = new Player(new Vector2D(this.getPreferredSize().width/2f, this.getPreferredSize().height/2f));
+        this.player = new Player(new Vector2D(this.getPreferredSize().width / 2f, this.getPreferredSize().height / 2f));
         this.circleBodies.add(this.player);
 
         this.sprites.addAll(this.circleBodies);
-        this.addKeyBindings();
+        this.addKeyListener(this);
     }
+
     private Vector2D GForce(CircleBody b1, CircleBody b2) {
         Vector2D F = new Vector2D(0, 0);
 
@@ -43,93 +46,57 @@ public class GravityScene extends Scene {
         return F;
     }
 
-    private void addKeyBindings() {
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false), "A pressed");
-        this.getActionMap().put("A pressed", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.LEFT = true;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "A released");
-        this.getActionMap().put("A released", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.LEFT = false;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false), "D pressed");
-        this.getActionMap().put("D pressed", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.RIGHT = true;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "D released");
-        this.getActionMap().put("D released", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.RIGHT = false;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), "W pressed");
-        this.getActionMap().put("W pressed", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.UP = true;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true), "W released");
-        this.getActionMap().put("W released", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.UP = false;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), "S pressed");
-        this.getActionMap().put("S pressed", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.DOWN = true;
-            }
-        });
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "S released");
-        this.getActionMap().put("S released", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.DOWN = false;
-            }
-        });
+    @Override
+    public void keyTyped(KeyEvent keyEvent) { }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        int keyCode = keyEvent.getKeyCode();
+        if (keyCode == KeyEvent.VK_W) player.UP = true;
+        else if (keyCode == KeyEvent.VK_A) player.LEFT = true;
+        else if (keyCode == KeyEvent.VK_S) player.DOWN = true;
+        else if (keyCode == KeyEvent.VK_D) player.RIGHT = true;
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+        int keyCode = keyEvent.getKeyCode();
+        if (keyCode == KeyEvent.VK_W) player.UP = false;
+        else if (keyCode == KeyEvent.VK_A) player.LEFT = false;
+        else if (keyCode == KeyEvent.VK_S) player.DOWN = false;
+        else if (keyCode == KeyEvent.VK_D) player.RIGHT = false;
     }
 
     @Override
     public void update(long elapsedTime) {
-        super.update(elapsedTime);
         this.circleBodies.forEach((go) -> {
-
             // Apply GForce to each circleBody
             go.acceleration.set(0, 0);
-            for (CircleBody other: this.circleBodies) {
-                if(other != go) go.applyForce(this.GForce(go, other));
+            for (CircleBody other : this.circleBodies) {
+                if (other != go) go.applyForce(this.GForce(go, other));
             }
+            // Friction
+            //go.applyForce(new Vector2D(-Math.signum(go.velocity.x) * go.getMass() * 0.0001,
+            //        -Math.signum(go.velocity.y) * go.getMass() * 0.0001));
 
             // Keep circleBodies inside the scene
-            if(go.getPosition().x - go.getRadius() <= 0) {
+            if (go.getPosition().x - go.getRadius() <= 0) {
                 go.getPosition().x = go.getRadius();
-                go.velocity.x *=- this.wallStickyFactor;
+                go.velocity.x *= -this.wallStickyFactor;
             }
-            if(go.getPosition().x + go.getRadius() >= getWidth()) {
+            if (go.getPosition().x + go.getRadius() >= getWidth()) {
                 go.getPosition().x = getWidth() - go.getRadius();
-                go.velocity.x *=- this.wallStickyFactor;
+                go.velocity.x *= -this.wallStickyFactor;
             }
-            if(go.getPosition().y - go.getRadius() <= 0) {
+            if (go.getPosition().y - go.getRadius() <= 0) {
                 go.getPosition().y = go.getRadius();
-                go.velocity.y *=- this.wallStickyFactor;
+                go.velocity.y *= -this.wallStickyFactor;
             }
-            if(go.getPosition().y + go.getRadius() >= getHeight()) {
+            if (go.getPosition().y + go.getRadius() >= getHeight()) {
                 go.getPosition().y = getHeight() - go.getRadius();
-                go.velocity.y *=- this.wallStickyFactor;
+                go.velocity.y *= -this.wallStickyFactor;
             }
         });
+       super.update(elapsedTime);
     }
 }

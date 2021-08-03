@@ -20,6 +20,10 @@ public class Vector2D {
     public Vector2D(Vector2D v) {
         set(v);
     }
+    public Vector2D(double xy) {
+        this.x = xy;
+        this.y = xy;
+    }
 
     public void set(double x, double y) {
         this.x = x;
@@ -85,6 +89,19 @@ public class Vector2D {
     public Vector2D getNormalized() {
         double magnitude = getLength();
         return new Vector2D(x / magnitude, y / magnitude);
+    }
+
+    public void clampMagnitude(double maxLength) {
+        double magnitude = getLength();
+        double factor = Math.min(magnitude, maxLength) / magnitude;
+        this.x *= factor;
+        this.y *= factor;
+    }
+
+    public Vector2D getClampedMagnitude(double maxLength) {
+        double magnitude = getLength();
+        double factor = Math.min(magnitude, maxLength) / magnitude;
+        return new Vector2D(x * magnitude, y * magnitude);
     }
 
     public static Vector2D toCartesian(double magnitude, double angle) {

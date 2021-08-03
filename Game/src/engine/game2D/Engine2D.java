@@ -49,13 +49,21 @@ public abstract class Engine2D {
         // Remove the current scene if it is in the frame
         for(Component component: this.frame.getComponents()) {
             if (component.equals(this.currentScene)) {
+                this.currentScene.setFocusable(false);
                 this.frame.remove(this.currentScene);
                 break;
             }
         }
 
         this.currentScene = this.scenes.get(sceneName);
+        this.currentScene.setFocusable(true);
         this.frame.add(this.currentScene);
+    }
+
+    public void startLoop() {
+        // after setting the frame visible we start the game loop, this could be done in a button or wherever you want
+        this.isRunning = true;
+        this.gameLoop.start();
     }
 
     private void setupLoopThread() {
@@ -115,11 +123,4 @@ public abstract class Engine2D {
             }
         });
     }
-
-    public void startLoop() {
-        // after setting the frame visible we start the game loop, this could be done in a button or wherever you want
-        this.isRunning = true;
-        this.gameLoop.start();
-    }
-
 }

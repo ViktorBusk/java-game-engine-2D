@@ -8,7 +8,7 @@ public abstract class Scene extends JPanel {
     protected final ArrayList<Sprite> sprites;
 
     public Scene(Dimension size) {
-        // we are using a game loop to repaint, so probably dont want swing randomly doing it for us
+        // we are using a game loop to repaint, so probably don't want swing randomly doing it for us
         this.setPreferredSize(size);
         this.setIgnoreRepaint(true);
         this.sprites = new ArrayList<>();
@@ -25,8 +25,9 @@ public abstract class Scene extends JPanel {
     }
 
     public void update(long elapsedTime) {
-        sprites.forEach((go) -> {
-            go.update(elapsedTime);
+        // Update each sprite
+        sprites.forEach((sprite) -> {
+            sprite.update(elapsedTime);
         });
     }
 }
