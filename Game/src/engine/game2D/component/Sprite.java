@@ -27,7 +27,7 @@ public class Sprite extends GameComponent {
         int h = (int)Math.round(this.size.y * transform.getScale().y);
         BufferedImage rotated = new BufferedImage(w, h, image.getType());
         Graphics2D graphic = rotated.createGraphics();
-        graphic.rotate(Math.toRadians(transform.getRotation().x), w/2, h/2);
+        graphic.rotate(Math.toRadians(transform.getRotation().x), w/2f, h/2f);
         graphic.drawImage(this.image, null, 0, 0);
         graphic.dispose();
         this.image = rotated;

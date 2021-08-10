@@ -10,18 +10,30 @@ public abstract class Engine2D {
     private final HashMap<String, Scene> scenes;
     private Scene currentScene;
     private final JFrame frame;
+    private int TARGET_FPS;
+    public static final int FALLBACK_FPS = 60;
 
     public Engine2D() {
         this.scenes = new HashMap<>();
         this.frame = new JFrame();
 
+        this.setupFromGraphicsEnvironment();
+
         this.frame.setTitle("Untitled");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Default frame size
-        this.frame.setSize(1400, 800);
         this.frame.setVisible(true);
         this.setupLoopThread();
+    }
+
+    private void setupFromGraphicsEnvironment() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        DisplayMode defaultDisplayMode = ge.getDefaultScreenDevice().getDisplayMode();
+
+        Vector2D resolution = new Vector2D(defaultDisplayMode.getWidth(), defaultDisplayMode.getHeight());
+        TARGET_FPS = Integer.max(defaultDisplayMode.getRefreshRate() , FALLBACK_FPS);
+        Vector2D frameSize = resolution.getDivided(1.2);
+        this.frame.setSize((int)Math.round(frameSize.x), (int)Math.round(frameSize.y));
     }
 
     public void setFrameSize(Dimension size) {
@@ -68,10 +80,8 @@ public abstract class Engine2D {
 
     private void setupLoopThread() {
         gameLoop = new Thread(() -> {
-            // how many frames should be drawn in a second
-            final int FRAMES_PER_SECOND = 144;
             // calculate how many nano seconds each frame should take for our target frames per second.
-            final long TIME_BETWEEN_UPDATES = 1000000000 / FRAMES_PER_SECOND;
+            final long TIME_BETWEEN_UPDATES = 1000000000 / TARGET_FPS;
             // track number of frames
             int frameCount;
             // if you're worried about visual hitches more than perfect timing, set this to 1. else 5 should be okay

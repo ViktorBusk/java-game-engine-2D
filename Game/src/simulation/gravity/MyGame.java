@@ -9,7 +9,7 @@ public class MyGame extends Engine2D {
 
     public MyGame() {
         this.setTitle("Gravity 2D");
-        this.setFrameSize(new Dimension(1600, 1000));
+        //this.setFrameSize(new Dimension(800, 800));
         this.addScene("Gravity", new GravityScene(this.getFrameSize()));
         this.setScene("Gravity");
         this.startLoop();

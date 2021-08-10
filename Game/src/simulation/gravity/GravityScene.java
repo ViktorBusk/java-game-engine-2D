@@ -40,14 +40,12 @@ public class GravityScene extends Scene implements KeyListener {
     private Vector2D GForce(CircleBody b1, CircleBody b2) {
         Vector2D F = new Vector2D(0, 0);
 
-        Vector2D b1Pos = b1.getComponent(Transform.class).getPosition();
-        Vector2D b2Pos = b2.getComponent(Transform.class).getPosition();
         Rigidbody b1Body = b1.getComponent(Rigidbody.class);
         Rigidbody b2Body = b2.getComponent(Rigidbody.class);
 
-        double distance = Math.max(b1Pos.distance(b2Pos), b1Body.getDiameter() + b2Body.getDiameter());
+        double distance = Math.max(b1Body.getCenterPosition().distance(b2Body.getCenterPosition()), b1Body.getShape().getBounds().width + b2Body.getShape().getBounds().width);
         double FMag = G * b1Body.getMass() * b2Body.getMass() / Math.pow(distance, 2);
-        double a = Math.atan2(b1Pos.y - b2Pos.y, b1Pos.x - b2Pos.x);
+        double a = Math.atan2(b1Body.getCenterPosition().y - b2Body.getCenterPosition().y, b1Body.getCenterPosition().x - b2Body.getCenterPosition().x);
 
         F.x = Math.cos(a) * FMag;
         F.y = Math.sin(a) * FMag;
@@ -87,23 +85,23 @@ public class GravityScene extends Scene implements KeyListener {
             for (CircleBody other : this.circleBodies) {
                 if (other != go) body.applyForce(this.GForce(go, other));
             }
-           // Keep circleBodies inside the scene
-           // if (position.x - body.getRadius() <= 0) {
-           //     position.x = body.getRadius();
-           //     body.getVelocity().x *= -this.wallStickyFactor;
-           // }
-           // if (position.x + body.getRadius() >= getWidth()) {
-           //     position.x = getWidth() - body.getRadius();
-           //     body.getVelocity().x *= -this.wallStickyFactor;
-           // }
-           // if (position.y - body.getRadius() <= 0) {
-           //     position.y = body.getRadius();
-           //     body.getVelocity().y *= -this.wallStickyFactor;
-           // }
-           // if (position.y + body.getRadius() >= getHeight()) {
-           //     position.y = getHeight() - body.getRadius();
-           //     body.getVelocity().y *= -this.wallStickyFactor;
-           // }
+            // Keep circleBodies inside the scene
+            if (position.x <= 0) {
+                position.x = 0;
+                body.getVelocity().x *= -this.wallStickyFactor;
+            }
+            if (position.x + body.getShape().getBounds().width >= getWidth()) {
+                position.x = getWidth() - body.getShape().getBounds().width;
+                body.getVelocity().x *= -this.wallStickyFactor;
+            }
+            if (position.y <= 0) {
+                position.y = 0;
+                body.getVelocity().y *= -this.wallStickyFactor;
+            }
+            if (position.y + body.getShape().getBounds().height >= getHeight()) {
+                position.y = getHeight() - body.getShape().getBounds().height;
+                body.getVelocity().y *= -this.wallStickyFactor;
+            }
         });
     }
 }
