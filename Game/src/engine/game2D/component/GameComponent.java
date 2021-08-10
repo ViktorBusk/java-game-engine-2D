@@ -4,6 +4,7 @@ import engine.game2D.GameObject;
 
 import java.awt.*;
 
+//FIXME: Maybe declare this class as an interface later
 public abstract class GameComponent {
     private GameObject parent = null;
 

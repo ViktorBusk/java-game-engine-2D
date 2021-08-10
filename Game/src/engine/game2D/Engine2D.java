@@ -32,6 +32,7 @@ public abstract class Engine2D {
 
         Vector2D resolution = new Vector2D(defaultDisplayMode.getWidth(), defaultDisplayMode.getHeight());
         TARGET_FPS = Integer.max(defaultDisplayMode.getRefreshRate() , FALLBACK_FPS);
+        System.out.println(TARGET_FPS);
         Vector2D frameSize = resolution.getDivided(1.2);
         this.frame.setSize((int)Math.round(frameSize.x), (int)Math.round(frameSize.y));
     }
