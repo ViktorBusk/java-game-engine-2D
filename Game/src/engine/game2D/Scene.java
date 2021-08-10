@@ -5,13 +5,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Scene extends JPanel {
-    protected final ArrayList<Sprite> sprites;
+    protected final ArrayList<GameObject> gameObjects;
 
     public Scene(Dimension size) {
         // we are using a game loop to repaint, so probably don't want swing randomly doing it for us
         this.setPreferredSize(size);
         this.setIgnoreRepaint(true);
-        this.sprites = new ArrayList<>();
+        this.gameObjects = new ArrayList<>();
     }
 
     @Override
@@ -19,15 +19,15 @@ public abstract class Scene extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         // this method gets called on Scene#repaint in our game loop and we then render each in our game
-        sprites.forEach((sprite) -> {
-            sprite.render(g2d);
+        gameObjects.forEach((gameObject) -> {
+            gameObject.render(g2d);
         });
     }
 
     public void update(long elapsedTime) {
         // Update each sprite
-        sprites.forEach((sprite) -> {
-            sprite.update(elapsedTime);
+        gameObjects.forEach((gameObject) -> {
+            gameObject.update(elapsedTime);
         });
     }
 }

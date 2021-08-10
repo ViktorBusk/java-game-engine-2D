@@ -93,9 +93,11 @@ public class Vector2D {
 
     public void clampMagnitude(double maxLength) {
         double magnitude = getLength();
-        double factor = Math.min(magnitude, maxLength) / magnitude;
-        this.x *= factor;
-        this.y *= factor;
+        if(magnitude != 0) {
+            double factor = Math.min(magnitude, maxLength) / magnitude;
+            this.x *= factor;
+            this.y *= factor;
+        }
     }
 
     public Vector2D getClampedMagnitude(double maxLength) {

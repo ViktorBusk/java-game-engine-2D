@@ -69,7 +69,7 @@ public abstract class Engine2D {
     private void setupLoopThread() {
         gameLoop = new Thread(() -> {
             // how many frames should be drawn in a second
-            final int FRAMES_PER_SECOND = 60;
+            final int FRAMES_PER_SECOND = 144;
             // calculate how many nano seconds each frame should take for our target frames per second.
             final long TIME_BETWEEN_UPDATES = 1000000000 / FRAMES_PER_SECOND;
             // track number of frames

@@ -1,6 +1,7 @@
 package simulation.gravity;
 
 import engine.game2D.Vector2D;
+import engine.game2D.component.Rigidbody;
 
 import java.awt.*;
 
@@ -14,10 +15,12 @@ public class Player extends CircleBody {
 
     @Override
     public void update(long elapsedTime) {
-        if (LEFT) this.applyForce(this.speedForce.getRotatedTo(Math.PI));
-        if (RIGHT) this.applyForce(this.speedForce.getRotatedTo(0));
-        if (UP) this.applyForce(this.speedForce.getRotatedTo(3*Math.PI/2));
-        if (DOWN) this.applyForce(this.speedForce.getRotatedTo(Math.PI/2));
+        Rigidbody body = this.getComponent(Rigidbody.class);
+
+        if (LEFT) body.applyForce(this.speedForce.getRotatedTo(Math.PI));
+        if (RIGHT) body.applyForce(this.speedForce.getRotatedTo(0));
+        if (UP) body.applyForce(this.speedForce.getRotatedTo(3*Math.PI/2));
+        if (DOWN) body.applyForce(this.speedForce.getRotatedTo(Math.PI/2));
         super.update(elapsedTime);
     }
 }
