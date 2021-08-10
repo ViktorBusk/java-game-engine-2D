@@ -87,23 +87,23 @@ public class GravityScene extends Scene implements KeyListener {
             for (CircleBody other : this.circleBodies) {
                 if (other != go) body.applyForce(this.GForce(go, other));
             }
-            // Keep circleBodies inside the scene
-            if (position.x - body.getRadius() <= 0) {
-                position.x = body.getRadius();
-                body.getVelocity().x *= -this.wallStickyFactor;
-            }
-            if (position.x + body.getRadius() >= getWidth()) {
-                position.x = getWidth() - body.getRadius();
-                body.getVelocity().x *= -this.wallStickyFactor;
-            }
-            if (position.y - body.getRadius() <= 0) {
-                position.y = body.getRadius();
-                body.getVelocity().y *= -this.wallStickyFactor;
-            }
-            if (position.y + body.getRadius() >= getHeight()) {
-                position.y = getHeight() - body.getRadius();
-                body.getVelocity().y *= -this.wallStickyFactor;
-            }
+           // Keep circleBodies inside the scene
+           // if (position.x - body.getRadius() <= 0) {
+           //     position.x = body.getRadius();
+           //     body.getVelocity().x *= -this.wallStickyFactor;
+           // }
+           // if (position.x + body.getRadius() >= getWidth()) {
+           //     position.x = getWidth() - body.getRadius();
+           //     body.getVelocity().x *= -this.wallStickyFactor;
+           // }
+           // if (position.y - body.getRadius() <= 0) {
+           //     position.y = body.getRadius();
+           //     body.getVelocity().y *= -this.wallStickyFactor;
+           // }
+           // if (position.y + body.getRadius() >= getHeight()) {
+           //     position.y = getHeight() - body.getRadius();
+           //     body.getVelocity().y *= -this.wallStickyFactor;
+           // }
         });
     }
 }
