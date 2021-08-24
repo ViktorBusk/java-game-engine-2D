@@ -2,8 +2,6 @@ package engine.game2D.component;
 
 import engine.game2D.Vector2D;
 
-import java.awt.*;
-
 public class Transform extends GameComponent {
     private Vector2D position;
     private Vector2D rotation;

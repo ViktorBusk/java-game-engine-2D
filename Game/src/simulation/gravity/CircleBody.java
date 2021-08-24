@@ -1,5 +1,6 @@
 package simulation.gravity;
 import engine.game2D.GameObject;
+import engine.game2D.Scene;
 import engine.game2D.Vector2D;
 import engine.game2D.component.Rigidbody;
 import engine.game2D.component.Transform;
@@ -10,8 +11,8 @@ import java.awt.geom.Ellipse2D;
 public class CircleBody extends GameObject {
     private final Color color;
 
-    public CircleBody(Vector2D position, int diameter, Color color) {
-        super();
+    public CircleBody(Scene scene, Vector2D position, int diameter, Color color) {
+        super(scene);
         this.getComponent(Transform.class).getPosition().set(position);
 
         double radius = diameter/2f;

@@ -42,7 +42,7 @@ public class Rigidbody extends GameComponent {
 
     @Override
     public void update(long elapsedTime) {
-        super.update(elapsedTime);// Update position
+        super.update(elapsedTime);
         this.velocity.add(this.acceleration.getMultiplied(elapsedTime));
         Vector2D position = this.getParent().getComponent(Transform.class).getPosition();
         position.add(this.velocity.getMultiplied(elapsedTime));

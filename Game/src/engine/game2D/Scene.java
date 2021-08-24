@@ -1,17 +1,28 @@
 package engine.game2D;
 
+import engine.game2D.component.Updatable;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public abstract class Scene extends JPanel {
-    protected final ArrayList<GameObject> gameObjects;
+public abstract class Scene extends JPanel implements Updatable { //(and Renderable) NOTE: JPanel already has a paintComponent()
+    private final HashMap<String, GameObject> gameObjects;
 
     public Scene(Dimension size) {
         // we are using a game loop to repaint, so probably don't want swing randomly doing it for us
         this.setPreferredSize(size);
         this.setIgnoreRepaint(true);
-        this.gameObjects = new ArrayList<>();
+        this.gameObjects = new HashMap<>();
+    }
+
+    public void addGameObject(GameObject gameObject, String name) {
+        this.gameObjects.put(name, gameObject);
+        Logger.debug("Added " + name + " " + gameObject);
+    }
+
+    protected GameObject getGameObject(String name) {
+        return this.gameObjects.get(name);
     }
 
     @Override
@@ -19,15 +30,16 @@ public abstract class Scene extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         // this method gets called on Scene#repaint in our game loop and we then render each in our game
-        gameObjects.forEach((gameObject) -> {
-            gameObject.render(g2d);
-        });
+        for(GameObject gameObject: gameObjects.values()) {
+           gameObject.render(g2d);
+        }
     }
 
+    @Override
     public void update(long elapsedTime) {
         // Update each sprite
-        gameObjects.forEach((gameObject) -> {
+        for(GameObject gameObject: gameObjects.values()) {
             gameObject.update(elapsedTime);
-        });
+        }
     }
 }

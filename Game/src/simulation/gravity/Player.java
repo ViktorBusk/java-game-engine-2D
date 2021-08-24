@@ -1,5 +1,6 @@
 package simulation.gravity;
 
+import engine.game2D.Scene;
 import engine.game2D.Vector2D;
 import engine.game2D.component.Rigidbody;
 
@@ -9,8 +10,8 @@ public class Player extends CircleBody {
     private final Vector2D speedForce = new Vector2D(10, 10);
     public boolean LEFT, RIGHT, UP, DOWN;
 
-    public Player(Vector2D position) {
-        super(position, 30, Color.GREEN);
+    public Player(Scene scene, Vector2D position) {
+        super(scene, position, 30, Color.GREEN);
     }
 
     @Override
